@@ -1164,6 +1164,27 @@ app.get('/search', function(req, res){
 	})
 });
 
+app.get('/search/advanced', function(req, res){
+	// TODO: Add ML and other cool stuff here
+	console.log('Advanced search ' + req.query.query);
+
+	mongo.connect(dbname, function(err, db){
+	db.collection('pictures').find({ $text : { $search: req.query.query } }) .toArray(function(err, search){
+		if(err) { return err };
+
+		if(search.length > 0) {
+			console.log(search);
+			res.json(search);
+			
+			}
+		else {
+			console.log('No photos in advanced search');
+			res.status(500).send('No photos found containing ' + req.query.query);
+		}
+		})
+	})
+});
+
 app.get('/user_info', login_check, function(req, res){
 	mongo.connect(dbname, function(err, db){
 		db.collection('users').find( { _id : req.session.user._id }).toArray(function(err, users){
