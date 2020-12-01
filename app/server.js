@@ -1175,7 +1175,6 @@ app.get('/search/advanced', function(req, res){
 		if(search.length > 0) {
 			console.log(search);
 			res.json(search);
-			
 			}
 		else {
 			console.log('No photos in advanced search');
