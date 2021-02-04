@@ -1177,8 +1177,28 @@ app.get('/search/advanced', function(req, res){
 			res.json(search);
 			}
 		else {
-			console.log('No photos in advanced search');
+			console.log('No photos in advanced search found');
 			res.status(500).send('No photos found containing ' + req.query.query);
+		}
+		})
+	})
+});
+
+app.get('/search/ml', function(req, res){
+	// TODO: Add ML and other cool stuff here
+	console.log('ML search ' + req.query.query);
+
+	mongo.connect(dbname, function(err, db){
+	db.collection('pictures').find({ $text : { $search: req.query.query } }) .toArray(function(err, search){
+		if(err) { return err };
+
+		if(search.length > 0) {
+			console.log(search);
+			res.json(search);
+			}
+		else {
+			res.status(500).send('No photos found containing ' + req.query.query);
+			console.log('No photos in advanced search found');
 		}
 		})
 	})
